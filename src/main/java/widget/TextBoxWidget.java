@@ -24,13 +24,21 @@ public class TextBoxWidget extends ComplexAnnotatedWidget<TextBoxData> {
     private void initialize() {
         root.backgroundProperty().bind(dataOrDefault.map(TextBoxData::getBackgroundColor).map(this::createSolidColorBackground));
         textLabel.textProperty().bind(dataOrDefault.map(TextBoxData::getText));
-        textLabel.textFillProperty().bind(dataOrDefault.map(TextBoxData::getTextColor).map(Color::web));
+        textLabel.textFillProperty().bind(dataOrDefault.map(TextBoxData::getTextColor).map(this::createColor));
 
         textLabel.setFont(Font.font(null, 26.0));
     }
 
+    private Color createColor(String color) {
+        try {
+            return Color.web(color);
+        } catch (Exception e) {
+            return Color.web("ffffff00");
+        }
+    }
+
     private Background createSolidColorBackground(String color) {
-        return new Background(new BackgroundFill(Color.web(color), null, null));
+        return new Background(new BackgroundFill(createColor(color), null, null));
     }
 
     @Override
